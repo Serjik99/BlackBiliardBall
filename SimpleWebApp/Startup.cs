@@ -78,10 +78,20 @@ namespace SimpleWebApp
                 endpoints.MapGet("/randomPrediction", async context=>
                 {
                     PredictionManager pm = new PredictionManager();
-                    //var query = context.Request.Query;
+                    var query = context.Request.Query;
                     pm.AddPrediction("New string");
                     //var s = pm.GetRandomPrediction();
                    // await context.Response.WriteAsync(s);
+                });
+
+                endpoints.MapGet("/addprediction", async context =>
+                {
+                    PredictionManager pm = new PredictionManager();
+                    string query = context.Request.Query["newPrediction"];
+                    string qqa = context.Request.Query["newParam"];
+                    pm.AddPrediction("New string");
+                    //var s = pm.GetRandomPrediction();
+                    // await context.Response.WriteAsync(s);
                 });
             });
         }

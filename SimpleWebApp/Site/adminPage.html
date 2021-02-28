@@ -40,13 +40,18 @@
         Добавить новый вариант предсказания:
         <div class="input-group" style="width: 70%; margin-left: 10%">
             <span class="input-group-text">Добавить новый вариант предсказания:</span>
-            <textarea class="form-control" aria-label="Добавить новый вариант предсказания:"></textarea>
-            <button class="btn btn-primary" onclick="fetch("/addPrediction")">Add 🍕</button>
+            <textarea id="textArea" class="form-control" aria-label="Добавить новый вариант предсказания:"></textarea>
+            <button class="btn btn-primary" onclick="onAddButtonClick()">Add 🍕</button>
         </div>
-        
-
     </div>
-    
+
+    <script>
+        function onAddButtonClick() {
+            var prediction = document.getElementById("textArea").value
+            fetch("/addprediction?newPrediction=" + prediction + "&newParam=" + "aaaaaa")
+            
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
