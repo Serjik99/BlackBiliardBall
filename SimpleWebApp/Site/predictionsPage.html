@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!-- Строка нужна для подключения русского языка -->
+    <meta charset="utf-8" />
+    <!--Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <title>🎱</title>
+</head>
+<body style="background-color: slategray">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Predictions</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="https://localhost:44351">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://localhost:44351/predictionsPage">Predictions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://localhost:44351/adminPage">Admin</a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+    <div id="answerDiv"
+         style="
+        margin-top: 34%;
+        margin-left: 7%;
+        margin-right: 7%;
+        color: white;
+        font-size: 30px;
+        font-family: 'Calibri';
+        font-style: italic">
+        Когда-нибудь здесь будет саркастический ответ, но пока вот тебе салат 🥗
+    </div>
+
+    <script>
+        window.onload = () => { getPrediction() }
+        function getPrediction()
+        {
+
+            //ex1
+            var responsePromise = fetch("/randomPrediction")
+            responsePromise.then((response) => {
+                var textPromise = response.text();
+                textPromise.then((readText) => {
+                    alert(readText);
+                    document.getElementById("answerDiv").textContent = readText;
+                })
+                
+            })
+
+            /*
+             * 
+            function getPrediction() {
+                var responsePromise = fetch("/randomPrediction")
+                responsePromise.then((response) => {
+                    alert(response);
+                    
+                })
+            }*/
+        }
+    </script >
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    
+</body>
+</html>
