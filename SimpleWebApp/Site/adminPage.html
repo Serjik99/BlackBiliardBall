@@ -15,13 +15,13 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="https://localhost:44351">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/auth">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://localhost:44351/predictionsPage">Predictions</a>
+                        <a class="nav-link" href="/">Predictions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://localhost:44351/adminPage">Admin</a>
+                        <a class="nav-link" href="/adminPage">Admin</a>
                     </li>
 
                 </ul>
@@ -43,15 +43,96 @@
             <textarea id="textArea" class="form-control" aria-label="Добавить новый вариант предсказания:"></textarea>
             <button class="btn btn-primary" onclick="onAddButtonClick()">Add 🍕</button>
         </div>
+        <button class="btn btn-primary" onclick="onAllButtonClick()">Add All🍕</button>
+    </div>
+
+    <div id="predictions-info" style="
+    color:lightskyblue;
+    text-align:center;">
+        <h2>Текущие предсказания</h2>
+        <div id="predictions-list">
+            
+        </div>
+
     </div>
 
     <script>
+
+        window.onload = () => {
+            onAllButtonClick();
+        }
         function onAddButtonClick() {
             var prediction = document.getElementById("textArea").value
-            fetch("/addprediction?newPrediction=" + prediction + "&newParam=" + "aaaaaa")
+            fetch("/addPrediction" ,
+            {
+                method: 'POST',
+                body: JSON.stringify({ PredictionString: prediction }), // данные могут быть 'строкой' или {объектом}!
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
             
         }
+
+        async function onAllButtonClick() {
+            document.getElementById("predictions-list").remove();
+            predictions = document.createElement("div");
+            predictions.id = "predictions-list";
+            let i = 0;
+            fetch("/allPredictions").then((response) => {
+                response.json().then((data) => {
+                    let array = Object.values(data);
+                    array.forEach(element => {
+                        div = createPredictionElement(element, i);
+                        predictions.append(div);
+                        i += 1;
+                    });
+                });
+            });
+            document.getElementById("predictions-info").append(predictions);
+        }
+
+        function createPredictionElement(element, i) {
+            let deletButton = document.createElement("button");
+            let updateButton = document.createElement("button");
+            let input = document.createElement("input");
+            deletButton.textContent = "delet";
+            deletButton.onclick = () => { deletPredictionElement(i); };
+            updateButton.textContent = "update";
+            updateButton.onclick = () => { updatePredictionElement(i); };
+            let div = document.createElement("div")
+            div.id = "prediction" + i;
+            div.style = "display: flex; justify-context: center;";
+           
+            input.value = element.predictionString;
+            div.append(input);
+            div.append(deletButton);
+            div.append(updateButton);
+            return div;
+        }
+
+        async function deletPredictionElement(i) {
+            let predictionText = document.getElementById("prediction" + i).firstChild.value;
+            await fetch("/deletPrediction", {
+                method: "POST",
+                body: JSON.stringify({ PredictionString: predictionText }),
+                headers: { "Content-Type": "application/json" }
+            });
+            onAllButtonClick();
+        }
+        async function updatePredictionElement(i) {
+            let predictionText = document.getElementById("prediction" + i).firstChild.value;
+            await fetch("/updatePrediction", {
+                method: "POST",
+                body: i + "::" + predictionText,
+                headers: { "Content-Type": "application/json" }
+            });
+            onAllButtonClick();
+        }
     </script>
+
+
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>

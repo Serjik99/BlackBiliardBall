@@ -16,13 +16,13 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="https://localhost:44351">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/auth">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://localhost:44351/predictionsPage">Predictions</a>
+                        <a class="nav-link" href="/">Predictions</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://localhost:44351/adminPage">Admin</a>
+                        <a class="nav-link" href="/adminPage">Admin</a>
                     </li>
 
                 </ul>
@@ -49,22 +49,25 @@
             <a href="https://localhost:44351/adminPage"> Go to Admin Page</a>
         </div>
         <script>
-            window.onload = () => { alert("Complete") }
+           
             window.onkeyup = (ev) => {
                 if (ev.key == "Enter") { onClick() }
             }
 
             async function onClick() {
 
-                var correctPasswordResponse = await fetch("/password")
-                var correctPassword = await correctPasswordResponse.text()
 
+                let correct = await fetch("/login", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'aplication/json' },
+                    body: JSON.getElementById({
+                        Login: document.getElementById("login").value,
+                        Password: document.getElementById("password").value
+                    })
+                });
 
-                var correctLoginResponse = await fetch("/login")
-                var correctLogin = await correctLoginResponse.text()
-
-                var passwordInput = document.getElementById("passwordInput")
-                var loginInput = document.getElementById("loginInput")
+               
+               
                 if (passwordInput.value == correctPassword && loginInput.value.toLowerCase() == correctLogin.toLowerCase()) {
 
                     window.location = "/adminPage"
